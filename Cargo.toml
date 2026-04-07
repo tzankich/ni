@@ -1,0 +1,28 @@
+[workspace.package]
+license = "MIT"
+repository = "https://github.com/tzankich/ni"
+
+[workspace]
+members = [
+    "crates/ni_error",
+    "crates/ni_lexer",
+    "crates/ni_parser",
+    "crates/ni_compiler",
+    "crates/ni_vm",
+    "crates/ni_runtime",
+    "crates/ni_codegen",
+    "crates/ni_lint",
+    "crates/ni_fmt",
+    "crates/ni_lsp",
+    "crates/ni_repl",
+]
+resolver = "2"
+
+[workspace.lints.clippy]
+type_complexity = "allow"
+wrong_self_convention = "allow"
+collapsible_if = "allow"
+if_same_then_else = "allow"
+option_if_let_else = "allow"
+unnecessary_unwrap = "allow"
+single_match = "allow"

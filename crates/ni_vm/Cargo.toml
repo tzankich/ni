@@ -1,0 +1,9 @@
+[package]
+name = "ni_vm"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ni_error = { path = "../ni_error" }
+[lints]
+workspace = true

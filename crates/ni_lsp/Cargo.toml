@@ -1,0 +1,20 @@
+[package]
+name = "ni_lsp"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "ni_lsp"
+path = "src/main.rs"
+
+[dependencies]
+ni_error = { path = "../ni_error" }
+ni_lexer = { path = "../ni_lexer" }
+ni_parser = { path = "../ni_parser" }
+ni_lint = { path = "../ni_lint" }
+ni_fmt = { path = "../ni_fmt" }
+tower-lsp = "0.20"
+tokio = { version = "1", features = ["full"] }
+serde_json = "1"
+[lints]
+workspace = true

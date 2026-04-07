@@ -1,0 +1,168 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Ni",
+  "scopeName": "source.ni",
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#string-triple-backtick" },
+    { "include": "#string-backtick" },
+    { "include": "#string-triple-double" },
+    { "include": "#string-triple-single" },
+    { "include": "#string-double" },
+    { "include": "#string-single" },
+    { "include": "#keyword-control" },
+    { "include": "#keyword-declaration" },
+    { "include": "#keyword-operator" },
+    { "include": "#constant-language" },
+    { "include": "#constant-numeric" },
+    { "include": "#function-definition" },
+    { "include": "#class-definition" },
+    { "include": "#spec-definition" },
+    { "include": "#function-call" },
+    { "include": "#identifier" }
+  ],
+  "repository": {
+    "comment": {
+      "name": "comment.line.double-slash.ni",
+      "match": "//.*$"
+    },
+
+    "string-triple-backtick": {
+      "name": "string.quoted.other.backtick.triple.ni",
+      "begin": "```",
+      "end": "```",
+      "patterns": [
+        { "include": "#escape" },
+        { "include": "#interpolation" }
+      ]
+    },
+    "string-backtick": {
+      "name": "string.interpolated.ni",
+      "begin": "`",
+      "end": "`",
+      "patterns": [
+        { "include": "#escape" },
+        { "include": "#interpolation" }
+      ]
+    },
+    "string-triple-double": {
+      "name": "string.quoted.double.triple.ni",
+      "begin": "\"\"\"",
+      "end": "\"\"\"",
+      "patterns": [
+        { "include": "#escape" }
+      ]
+    },
+    "string-triple-single": {
+      "name": "string.quoted.single.triple.ni",
+      "begin": "'''",
+      "end": "'''",
+      "patterns": [
+        { "include": "#escape" }
+      ]
+    },
+    "string-double": {
+      "name": "string.quoted.double.ni",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        { "include": "#escape" }
+      ]
+    },
+    "string-single": {
+      "name": "string.quoted.single.ni",
+      "begin": "'",
+      "end": "'",
+      "patterns": [
+        { "include": "#escape" }
+      ]
+    },
+
+    "escape": {
+      "name": "constant.character.escape.ni",
+      "match": "\\\\[\\\\\"'`ntr0{}]"
+    },
+    "interpolation": {
+      "name": "meta.interpolation.ni",
+      "begin": "\\{",
+      "end": "\\}",
+      "beginCaptures": {
+        "0": { "name": "punctuation.section.interpolation.begin.ni" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.section.interpolation.end.ni" }
+      },
+      "patterns": [
+        { "include": "$self" }
+      ]
+    },
+
+    "keyword-control": {
+      "name": "keyword.control.ni",
+      "match": "\\b(if|elif|else|while|for|in|break|continue|match|when|case|pass|return|try|catch|fail|assert|spawn|yield|wait|fiber)\\b"
+    },
+    "keyword-declaration": {
+      "name": "keyword.declaration.ni",
+      "match": "\\b(var|const|fun|class|extends|enum|import|from|as|static|get|set|spec|given|then|each)\\b"
+    },
+    "keyword-operator": {
+      "name": "keyword.operator.ni",
+      "match": "\\b(and|or|not|is)\\b"
+    },
+    "constant-language": {
+      "name": "constant.language.ni",
+      "match": "\\b(true|false|none|null|self|super)\\b"
+    },
+    "constant-numeric": {
+      "patterns": [
+        {
+          "name": "constant.numeric.hex.ni",
+          "match": "\\b0x[0-9a-fA-F_]+\\b"
+        },
+        {
+          "name": "constant.numeric.binary.ni",
+          "match": "\\b0b[01_]+\\b"
+        },
+        {
+          "name": "constant.numeric.float.ni",
+          "match": "\\b[0-9][0-9_]*\\.[0-9][0-9_]*\\b"
+        },
+        {
+          "name": "constant.numeric.integer.ni",
+          "match": "\\b[0-9][0-9_]*\\b"
+        }
+      ]
+    },
+    "function-definition": {
+      "match": "\\b(fun)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+      "captures": {
+        "1": { "name": "keyword.declaration.ni" },
+        "2": { "name": "entity.name.function.ni" }
+      }
+    },
+    "class-definition": {
+      "match": "\\b(class|enum)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+      "captures": {
+        "1": { "name": "keyword.declaration.ni" },
+        "2": { "name": "entity.name.class.ni" }
+      }
+    },
+    "spec-definition": {
+      "match": "\\b(spec)\\s+(\"[^\"]*\"|'[^']*')",
+      "captures": {
+        "1": { "name": "keyword.declaration.ni" },
+        "2": { "name": "entity.name.section.ni" }
+      }
+    },
+    "function-call": {
+      "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\()",
+      "captures": {
+        "1": { "name": "entity.name.function.call.ni" }
+      }
+    },
+    "identifier": {
+      "name": "variable.other.ni",
+      "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+    }
+  }
+}

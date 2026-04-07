@@ -1,0 +1,10 @@
+[package]
+name = "ni_parser"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ni_error = { path = "../ni_error" }
+ni_lexer = { path = "../ni_lexer" }
+[lints]
+workspace = true

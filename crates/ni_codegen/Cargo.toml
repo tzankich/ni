@@ -1,0 +1,13 @@
+[package]
+name = "ni_codegen"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ni_error = { path = "../ni_error" }
+ni_parser = { path = "../ni_parser" }
+
+[dev-dependencies]
+ni_lexer = { path = "../ni_lexer" }
+[lints]
+workspace = true
