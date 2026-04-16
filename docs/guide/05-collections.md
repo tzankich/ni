@@ -77,6 +77,22 @@ var stats = ["hp": 100, "mp": 50, "str": 15]
 var empty_map = [:]
 ```
 
+Maps also support a brace-style literal. Quoted keys work, and bare
+identifiers before `:` are treated as string keys (like JavaScript/Ruby):
+
+```ni
+var stats = {"hp": 100, "mp": 50}   // quoted keys
+var stats = {hp: 100, mp: 50}       // bare identifier keys (same map)
+```
+
+If you need a computed/dynamic key, use the list form — inside `{}` a bare
+identifier is always a literal string key, not a variable lookup:
+
+```ni
+const k = "hp"
+var stats = [k: 100]                // key is the value of k
+```
+
 ### Accessing Values
 
 ```ni

@@ -1075,6 +1075,51 @@ print(items.join(", "))"#,
         run_expect("import math\nprint(math.floor(3.7))", &["3"]);
     }
 
+    #[test]
+    fn test_map_bare_identifier_keys() {
+        // JSON-style: {text: "hello"} — bare identifier treated as string key
+        run_expect(
+            r#"var m = {text: "hello"}
+print(m.text)
+print(m["text"])"#,
+            &["hello", "hello"],
+        );
+    }
+
+    #[test]
+    fn test_map_bare_identifier_mixed() {
+        // Mix of bare-identifier and quoted keys
+        run_expect(
+            r#"var m = {name: "Ni", "version": 1, count: 42}
+print(m.name)
+print(m.version)
+print(m.count)"#,
+            &["Ni", "1", "42"],
+        );
+    }
+
+    #[test]
+    fn test_map_expression_key_still_works() {
+        // Non-bare-identifier keys are still parsed as expressions
+        run_expect(
+            r#"const k = "dyn"
+var m = {k + "_x": "v"}
+print(m["dyn_x"])"#,
+            &["v"],
+        );
+    }
+
+    #[test]
+    fn test_map_bare_identifier_empty_and_trailing() {
+        // Empty map still works, trailing comma still works
+        run_expect(
+            r#"var m = {a: 1, b: 2,}
+print(m.a)
+print(m.b)"#,
+            &["1", "2"],
+        );
+    }
+
     // -- Math module --
 
     #[test]

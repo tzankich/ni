@@ -258,7 +258,7 @@ impl ExprParser {
                         span,
                     });
                 }
-                let first = Self::parse_bp(parser, BP_NONE)?;
+                let first = Self::parse_map_key(parser)?;
                 parser.expect(TokenKind::Colon)?;
                 let first_val = Self::parse_bp(parser, BP_NONE)?;
                 let mut entries = vec![(first, first_val)];
@@ -267,7 +267,7 @@ impl ExprParser {
                     if parser.check(&TokenKind::RightBrace) {
                         break;
                     } // trailing comma
-                    let key = Self::parse_bp(parser, BP_NONE)?;
+                    let key = Self::parse_map_key(parser)?;
                     parser.expect(TokenKind::Colon)?;
                     let val = Self::parse_bp(parser, BP_NONE)?;
                     entries.push((key, val));
@@ -612,6 +612,25 @@ impl ExprParser {
                 value: Box::new(value),
             },
         })
+    }
+
+    /// Parse a map key. A bare `Identifier` followed by `:` is treated as a
+    /// string key (e.g. `{text: "hi"}` means `{"text": "hi"}`). Any other form
+    /// is parsed as a general expression.
+    fn parse_map_key(parser: &mut Parser) -> NiResult<Expr> {
+        if let TokenKind::Identifier(name) = parser.peek_kind() {
+            if let Some(next) = parser.peek_offset(1) {
+                if matches!(next.kind, TokenKind::Colon) {
+                    let span = parser.current_span();
+                    parser.advance();
+                    return Ok(Expr {
+                        kind: ExprKind::StringLiteral(name),
+                        span,
+                    });
+                }
+            }
+        }
+        Self::parse_bp(parser, BP_NONE)
     }
 
     fn parse_args(parser: &mut Parser) -> NiResult<Vec<Expr>> {

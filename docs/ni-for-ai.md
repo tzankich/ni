@@ -149,14 +149,19 @@ ls.reverse()                 // reverse in place
 [1, 2] + [3, 4]             // [1, 2, 3, 4] (concatenation)
 3 in ls                      // true (membership test)
 
-// Maps
-var m = ["hp": 100, "mp": 50]
+// Maps — three literal forms
+var m = ["hp": 100, "mp": 50]       // list-style
+var m = {"hp": 100, "mp": 50}       // brace-style with quoted keys
+var m = {hp: 100, mp: 50}           // brace-style with bare identifier keys
+var empty = [:]                     // empty map
 m["hp"]                      // 100
 m.hp                         // 100 (dot access for string keys)
 m["str"] = 15                // add/update
 m.keys()                     // list of keys
 m.values()                   // list of values
 "hp" in m                    // true (key check)
+// Note: inside {} a bare identifier before `:` is a string key.
+// For a computed/dynamic key, use the list form: [some_var: value]
 
 // Ranges
 0..5                         // 0,1,2,3,4
@@ -255,8 +260,16 @@ time.since(start)     // float seconds elapsed since start
 time.sleep(secs)      // sleep for secs seconds (rejects negative)
 
 // json module
-json.parse(str)       // parse JSON string → map/list/string/int/float/bool/none
+json.parse(str)       // parse JSON string → Ni value
+                      // JSON → Ni: object→map, array→list, string→string,
+                      //           number→int/float, true→bool, false→bool, null→none
+                      // Errors on invalid JSON; max nesting depth 256
 json.encode(val)      // encode Ni value → JSON string
+                      // Ni → JSON: int→number, float→number, bool→bool, none→null,
+                      //            string→string, list→array, map→object
+                      // Errors on NaN/Infinity; map keys must be strings
+                      // Properly escapes strings (\n \t \r \\ \" etc)
+                      // Max nesting depth 256
 ```
 
 ## Testing
@@ -294,12 +307,25 @@ spec "checkout flow":
 
 Each root-to-leaf path runs in isolation. `given`/`when` blocks re-execute per `then`.
 
+Combined with brace-style map literals and dot access, specs read cleanly:
+
+```ni
+fun run(input):
+    return {echo: input.text}
+
+spec "passes non-ascii through":
+    given "an emoji string":
+        var result = run({text: "hi 🦀"})
+        then "returns it untouched":
+            assert result.echo == "hi 🦀"
+```
+
 ### Data-Driven Specs
 
 ```ni
 spec "validation" each (
-    ["input": "",    "valid": false],
-    ["input": "abc", "valid": true]
+    {input: "",    valid: false},
+    {input: "abc", valid: true}
 ):
     given "input data":
         then "{input} validity is {valid}":
